@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import CountUp from "react-countup";
@@ -30,13 +30,19 @@ import {
   Linkedin,
   Github,
   Twitter,
+  Instagram,
+  Facebook,
   ExternalLink,
   Quote,
-  ArrowRight
+  ArrowRight,
+  Layers,
+  Database,
+  Cloud,
+  GitBranch,
+  Terminal,
+  Monitor
 } from "lucide-react";
 import { Button } from "./components/ui/button";
-import { Input } from "./components/ui/input";
-import { Textarea } from "./components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
 import { Toaster, toast } from "sonner";
 
@@ -72,6 +78,42 @@ const AnimatedSection = ({ children, className = "" }) => {
     >
       {children}
     </motion.div>
+  );
+};
+
+// New Logo Component
+const SoftogramLogo = ({ size = "default" }) => {
+  const sizes = {
+    small: { container: "w-8 h-8", text: "text-lg" },
+    default: { container: "w-10 h-10", text: "text-xl" },
+    large: { container: "w-12 h-12", text: "text-2xl" }
+  };
+  
+  return (
+    <div className="flex items-center gap-2">
+      <div className={`${sizes[size].container} relative`}>
+        {/* Outer ring with gradient */}
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-cyan-400 via-cyan-500 to-violet-600 animate-pulse opacity-50 blur-sm"></div>
+        {/* Main logo container */}
+        <div className="relative w-full h-full rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center overflow-hidden">
+          {/* Abstract S shape */}
+          <svg viewBox="0 0 40 40" className="w-6 h-6" fill="none">
+            <path 
+              d="M28 12C28 12 24 8 18 10C12 12 10 18 14 22C18 26 26 24 28 28C30 32 24 36 18 34C12 32 10 28 10 28" 
+              stroke="black" 
+              strokeWidth="3" 
+              strokeLinecap="round"
+              fill="none"
+            />
+            <circle cx="28" cy="12" r="2" fill="black"/>
+            <circle cx="10" cy="28" r="2" fill="black"/>
+          </svg>
+        </div>
+      </div>
+      <span className={`font-bold ${sizes[size].text} text-white font-['Space_Grotesk'] tracking-tight`}>
+        Softo<span className="text-cyan-400">gram</span>
+      </span>
+    </div>
   );
 };
 
@@ -152,6 +194,8 @@ const TypingCode = () => {
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -161,12 +205,17 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
+  const navLinks = isHomePage ? [
     { href: "#services", label: "Services" },
+    { href: "#case-studies", label: "Case Studies" },
     { href: "#pricing", label: "Pricing" },
     { href: "#portfolio", label: "Portfolio" },
-    { href: "#about", label: "About" },
     { href: "#contact", label: "Contact" }
+  ] : [
+    { href: "/", label: "Home" },
+    { href: "/#services", label: "Services" },
+    { href: "/#pricing", label: "Pricing" },
+    { href: "/#contact", label: "Contact" }
   ];
 
   return (
@@ -174,35 +223,51 @@ const Navbar = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-5xl z-50 rounded-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between transition-all duration-300 ${
-        scrolled ? "navbar-glass shadow-2xl" : "bg-transparent border border-transparent"
+      className={`fixed top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-5xl z-50 rounded-full px-6 md:px-8 py-4 flex items-center justify-between transition-all duration-300 ${
+        scrolled ? "navbar-glass shadow-2xl" : "bg-black/30 backdrop-blur-sm border border-white/5"
       }`}
       data-testid="navbar"
     >
-      <a href="#" className="flex items-center gap-2" data-testid="logo-link">
-        <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center">
-          <Code className="w-4 h-4 md:w-5 md:h-5 text-black" />
-        </div>
-        <span className="font-bold text-lg md:text-xl text-white font-['Space_Grotesk']">Softogram</span>
-      </a>
+      <Link to="/" className="flex items-center gap-2" data-testid="logo-link">
+        <SoftogramLogo size="small" />
+      </Link>
 
       {/* Desktop Nav */}
       <div className="hidden md:flex items-center gap-8">
         {navLinks.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium"
-            data-testid={`nav-link-${link.label.toLowerCase()}`}
-          >
-            {link.label}
-          </a>
+          link.href.startsWith("#") || link.href.includes("#") ? (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium"
+              data-testid={`nav-link-${link.label.toLowerCase().replace(" ", "-")}`}
+            >
+              {link.label}
+            </a>
+          ) : (
+            <Link
+              key={link.href}
+              to={link.href}
+              className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium"
+              data-testid={`nav-link-${link.label.toLowerCase()}`}
+            >
+              {link.label}
+            </Link>
+          )
         ))}
-        <a href="#contact">
-          <button className="btn-glow text-sm" data-testid="nav-cta-button">
-            Start Project
-          </button>
-        </a>
+        {isHomePage ? (
+          <a href="#contact">
+            <button className="btn-glow text-sm" data-testid="nav-cta-button">
+              Start Project
+            </button>
+          </a>
+        ) : (
+          <Link to="/#contact">
+            <button className="btn-glow text-sm" data-testid="nav-cta-button">
+              Start Project
+            </button>
+          </Link>
+        )}
       </div>
 
       {/* Mobile Menu Button */}
@@ -226,16 +291,27 @@ const Navbar = () => {
           >
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-gray-400 hover:text-cyan-400 transition-colors text-base font-medium py-2"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </a>
+                link.href.startsWith("#") ? (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="text-gray-400 hover:text-cyan-400 transition-colors text-base font-medium py-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    className="text-gray-400 hover:text-cyan-400 transition-colors text-base font-medium py-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                )
               ))}
-              <a href="#contact" onClick={() => setMobileMenuOpen(false)}>
+              <a href={isHomePage ? "#contact" : "/#contact"} onClick={() => setMobileMenuOpen(false)}>
                 <button className="btn-glow w-full py-3 text-sm mt-2">
                   Start Project
                 </button>
@@ -251,7 +327,7 @@ const Navbar = () => {
 // Hero Section
 const HeroSection = () => {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden px-4 dot-pattern" data-testid="hero-section">
+    <section className="min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden px-4 dot-pattern pt-20" data-testid="hero-section">
       {/* Background Orbs */}
       <div className="gradient-orb orb-cyan absolute -top-48 -right-48" />
       <div className="gradient-orb orb-violet absolute -bottom-32 -left-32" />
@@ -261,7 +337,7 @@ const HeroSection = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="relative z-10 max-w-4xl mx-auto pt-24"
+        className="relative z-10 max-w-4xl mx-auto pt-16"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -437,6 +513,139 @@ const ServicesSection = () => {
   );
 };
 
+// Case Studies Section
+const CaseStudiesSection = () => {
+  const caseStudy = {
+    title: "Polluxkart",
+    subtitle: "Full-Stack E-commerce Platform",
+    description: "A complete e-commerce solution built from the ground up, featuring a modern React frontend, FastAPI Python backend, and microservices architecture deployed on AWS.",
+    challenge: "The client needed a scalable e-commerce platform that could handle thousands of concurrent users, integrate multiple payment gateways, and provide real-time inventory management across multiple warehouses.",
+    solution: "We architected a microservices-based system with separate services for user management, product catalog, orders, payments, and inventory. Each service was containerized using Docker and deployed on AWS ECS with auto-scaling capabilities.",
+    results: [
+      { metric: "99.9%", label: "Uptime Achieved" },
+      { metric: "< 200ms", label: "Average API Response" },
+      { metric: "10,000+", label: "Concurrent Users" },
+      { metric: "3x", label: "Sales Increase" }
+    ],
+    techStack: [
+      { name: "React.js", icon: Monitor, category: "Frontend" },
+      { name: "FastAPI", icon: Terminal, category: "Backend" },
+      { name: "Node.js", icon: Server, category: "Services" },
+      { name: "PostgreSQL", icon: Database, category: "Database" },
+      { name: "Redis", icon: Zap, category: "Caching" },
+      { name: "Docker", icon: Layers, category: "Container" },
+      { name: "AWS", icon: Cloud, category: "Cloud" },
+      { name: "GitHub Actions", icon: GitBranch, category: "CI/CD" }
+    ],
+    architecture: [
+      { phase: "Frontend", description: "React.js with Redux for state management, Tailwind CSS for styling, deployed on AWS CloudFront CDN" },
+      { phase: "API Gateway", description: "FastAPI with async request handling, JWT authentication, rate limiting, and request validation" },
+      { phase: "Microservices", description: "Node.js services for real-time features (chat, notifications), Python services for ML-based recommendations" },
+      { phase: "Database Layer", description: "PostgreSQL for transactional data, Redis for caching and session management, Elasticsearch for product search" },
+      { phase: "Infrastructure", description: "AWS ECS for container orchestration, RDS for managed databases, S3 for media storage, CloudWatch for monitoring" }
+    ]
+  };
+
+  return (
+    <section id="case-studies" className="section-padding bg-black" data-testid="case-studies-section">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 font-['Space_Grotesk']">
+            <span className="gradient-text">Case Study: Deep Dive</span>
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            See how we approach complex projects — from architecture to deployment.
+          </p>
+        </AnimatedSection>
+
+        {/* Main Case Study Card */}
+        <div className="glass-card p-8 md:p-12 mb-12">
+          <div className="flex flex-col lg:flex-row gap-8 mb-12">
+            <div className="lg:w-1/2">
+              <span className="text-cyan-400 text-sm font-semibold uppercase tracking-wider">Featured Project</span>
+              <h3 className="text-3xl md:text-4xl font-bold text-white mt-2 mb-4 font-['Space_Grotesk']">{caseStudy.title}</h3>
+              <p className="text-xl text-gray-400 mb-6">{caseStudy.subtitle}</p>
+              <p className="text-gray-500 leading-relaxed">{caseStudy.description}</p>
+            </div>
+            <div className="lg:w-1/2">
+              <img 
+                src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop" 
+                alt="Polluxkart E-commerce Platform"
+                className="w-full h-64 lg:h-full object-cover rounded-xl"
+              />
+            </div>
+          </div>
+
+          {/* Results Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+            {caseStudy.results.map((result, index) => (
+              <div key={index} className="text-center p-6 bg-[#111111] rounded-xl border border-[#2A2A2A]">
+                <div className="text-2xl md:text-3xl font-bold gradient-text mb-2">{result.metric}</div>
+                <p className="text-gray-500 text-sm">{result.label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Challenge & Solution */}
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="p-6 bg-[#111111] rounded-xl border-l-4 border-cyan-400">
+              <h4 className="text-xl font-bold text-white mb-4 font-['Space_Grotesk']">The Challenge</h4>
+              <p className="text-gray-500 leading-relaxed">{caseStudy.challenge}</p>
+            </div>
+            <div className="p-6 bg-[#111111] rounded-xl border-l-4 border-violet-500">
+              <h4 className="text-xl font-bold text-white mb-4 font-['Space_Grotesk']">Our Solution</h4>
+              <p className="text-gray-500 leading-relaxed">{caseStudy.solution}</p>
+            </div>
+          </div>
+
+          {/* Tech Stack */}
+          <div className="mb-12">
+            <h4 className="text-xl font-bold text-white mb-6 font-['Space_Grotesk']">Technology Stack</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {caseStudy.techStack.map((tech, index) => (
+                <div key={index} className="flex items-center gap-3 p-4 bg-[#111111] rounded-xl border border-[#2A2A2A] hover:border-cyan-400/30 transition-all">
+                  <tech.icon className="w-5 h-5 text-cyan-400" />
+                  <div>
+                    <p className="text-white font-medium text-sm">{tech.name}</p>
+                    <p className="text-gray-600 text-xs">{tech.category}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Architecture Breakdown */}
+          <div>
+            <h4 className="text-xl font-bold text-white mb-6 font-['Space_Grotesk']">Architecture Breakdown</h4>
+            <div className="space-y-4">
+              {caseStudy.architecture.map((item, index) => (
+                <div key={index} className="flex gap-4 p-4 bg-[#111111] rounded-xl border border-[#2A2A2A]">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-violet-600 flex items-center justify-center text-black font-bold text-sm flex-shrink-0">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <h5 className="text-white font-semibold mb-1">{item.phase}</h5>
+                    <p className="text-gray-500 text-sm">{item.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <a href="#contact">
+            <button className="btn-glow">
+              Discuss Your Project
+              <ArrowRight className="w-5 h-5 ml-2 inline" />
+            </button>
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 // Pricing Section
 const PricingSection = () => {
   const plans = [
@@ -484,7 +693,7 @@ const PricingSection = () => {
   ];
 
   return (
-    <section id="pricing" className="section-padding bg-black" data-testid="pricing-section">
+    <section id="pricing" className="section-padding bg-[#0D0D0D]" data-testid="pricing-section">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 font-['Space_Grotesk']">
@@ -562,7 +771,7 @@ const ProjectsSection = () => {
   ];
 
   return (
-    <section id="portfolio" className="section-padding bg-[#0D0D0D]" data-testid="portfolio-section">
+    <section id="portfolio" className="section-padding bg-black" data-testid="portfolio-section">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 font-['Space_Grotesk']">
@@ -639,7 +848,7 @@ const TestimonialsSection = () => {
   ];
 
   return (
-    <section className="section-padding bg-black" data-testid="testimonials-section">
+    <section className="section-padding bg-[#0D0D0D]" data-testid="testimonials-section">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 font-['Space_Grotesk']">
@@ -702,7 +911,7 @@ const WhyChooseUsSection = () => {
   ];
 
   return (
-    <section id="about" className="section-padding bg-[#0D0D0D]" data-testid="why-choose-section">
+    <section id="about" className="section-padding bg-black" data-testid="why-choose-section">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 font-['Space_Grotesk']">
@@ -793,7 +1002,7 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="section-padding bg-black" data-testid="contact-section">
+    <section id="contact" className="section-padding bg-[#0D0D0D]" data-testid="contact-section">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 font-['Space_Grotesk']">
@@ -969,7 +1178,9 @@ const ContactSection = () => {
                   {[
                     { icon: Linkedin, href: "#", label: "LinkedIn" },
                     { icon: Github, href: "#", label: "GitHub" },
-                    { icon: Twitter, href: "#", label: "Twitter" }
+                    { icon: Twitter, href: "#", label: "Twitter" },
+                    { icon: Instagram, href: "#", label: "Instagram" },
+                    { icon: Facebook, href: "#", label: "Facebook" }
                   ].map((social, index) => (
                     <a
                       key={index}
@@ -997,11 +1208,18 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
-    { href: "#", label: "Home" },
-    { href: "#services", label: "Services" },
-    { href: "#pricing", label: "Pricing" },
-    { href: "#portfolio", label: "Portfolio" },
-    { href: "#contact", label: "Contact" }
+    { href: "/", label: "Home" },
+    { href: "/#services", label: "Services" },
+    { href: "/#pricing", label: "Pricing" },
+    { href: "/#portfolio", label: "Portfolio" },
+    { href: "/#contact", label: "Contact" }
+  ];
+
+  const legalLinks = [
+    { href: "/privacy-policy", label: "Privacy Policy" },
+    { href: "/terms-and-conditions", label: "Terms & Conditions" },
+    { href: "/refund-policy", label: "Refund Policy" },
+    { href: "/cookie-policy", label: "Cookie Policy" }
   ];
 
   return (
@@ -1010,16 +1228,11 @@ const Footer = () => {
       <div className="footer-gradient-border"></div>
       
       <div className="container-custom py-16">
-        <div className="grid md:grid-cols-3 gap-12 mb-12">
+        <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center">
-                <Code className="w-5 h-5 text-black" />
-              </div>
-              <span className="font-bold text-xl text-white font-['Space_Grotesk']">Softogram</span>
-            </div>
-            <p className="text-gray-500 mb-4">Your idea. Our code. Delivered.</p>
+            <SoftogramLogo size="default" />
+            <p className="text-gray-500 mt-4 mb-4">Your idea. Our code. Delivered.</p>
             <p className="text-sm text-gray-600">
               Premium software development studio crafting digital experiences.
             </p>
@@ -1031,13 +1244,31 @@ const Footer = () => {
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.href}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-gray-500 hover:text-cyan-400 transition-colors text-sm"
                     data-testid={`footer-link-${link.label.toLowerCase()}`}
                   >
                     {link.label}
-                  </a>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="font-semibold text-white mb-4 font-['Space_Grotesk']">Legal</h4>
+            <ul className="space-y-3">
+              {legalLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-gray-500 hover:text-cyan-400 transition-colors text-sm"
+                    data-testid={`footer-link-${link.label.toLowerCase().replace(/ /g, "-")}`}
+                  >
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -1050,7 +1281,9 @@ const Footer = () => {
               {[
                 { icon: Linkedin, href: "#" },
                 { icon: Github, href: "#" },
-                { icon: Twitter, href: "#" }
+                { icon: Twitter, href: "#" },
+                { icon: Instagram, href: "#" },
+                { icon: Facebook, href: "#" }
               ].map((social, index) => (
                 <a
                   key={index}
@@ -1096,6 +1329,284 @@ const WhatsAppButton = () => {
   );
 };
 
+// Policy Page Layout Component
+const PolicyLayout = ({ title, lastUpdated, children }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-black">
+      <Navbar />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="pt-32 pb-20"
+      >
+        <div className="max-w-3xl mx-auto px-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 font-['Space_Grotesk']">
+            <span className="gradient-text">{title}</span>
+          </h1>
+          <p className="text-gray-500 text-sm mb-12">Last updated: {lastUpdated}</p>
+          <div className="space-y-8">
+            {children}
+          </div>
+        </div>
+      </motion.div>
+      <Footer />
+      <WhatsAppButton />
+    </div>
+  );
+};
+
+// Policy Section Component
+const PolicySection = ({ title, children }) => (
+  <div className="policy-section">
+    <h2 className="text-xl font-semibold text-white mb-4 pl-4 border-l-4 border-cyan-400 font-['Space_Grotesk']">
+      {title}
+    </h2>
+    <div className="text-gray-400 leading-relaxed space-y-4">
+      {children}
+    </div>
+  </div>
+);
+
+// Privacy Policy Page
+const PrivacyPolicy = () => (
+  <PolicyLayout title="Privacy Policy" lastUpdated="March 2026">
+    <PolicySection title="Information We Collect">
+      <p>We collect information you provide directly to us, including:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Name, email address, and phone number</li>
+        <li>Project details and requirements submitted via our contact form</li>
+        <li>Communication history and correspondence</li>
+        <li>Any other information you choose to provide</li>
+      </ul>
+    </PolicySection>
+
+    <PolicySection title="How We Use Your Information">
+      <p>We use the information we collect to:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Respond to your inquiries and provide customer support</li>
+        <li>Deliver project work and related services</li>
+        <li>Send you updates about your project and our services</li>
+        <li>Improve our website and services</li>
+        <li>Comply with legal obligations</li>
+      </ul>
+    </PolicySection>
+
+    <PolicySection title="Data Storage & Security">
+      <p>Your data is stored securely using industry-standard encryption and security practices. We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+      <p className="mt-4">We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy.</p>
+    </PolicySection>
+
+    <PolicySection title="Cookies">
+      <p>We use cookies and similar tracking technologies to analyze website traffic and improve your experience. These include:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Essential cookies required for website functionality</li>
+        <li>Analytics cookies (Google Analytics) to understand how visitors use our site</li>
+        <li>Preference cookies to remember your settings</li>
+      </ul>
+      <p className="mt-4">You can control cookie settings through your browser preferences.</p>
+    </PolicySection>
+
+    <PolicySection title="Third-Party Services">
+      <p>We may use third-party services that collect, monitor, and analyze data:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Google Analytics for website traffic analysis</li>
+        <li>WhatsApp Business for customer communication</li>
+        <li>Email service providers for communication</li>
+      </ul>
+    </PolicySection>
+
+    <PolicySection title="Your Rights">
+      <p>You have the right to:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Access the personal information we hold about you</li>
+        <li>Request correction of inaccurate data</li>
+        <li>Request deletion of your data at any time</li>
+        <li>Opt-out of marketing communications</li>
+      </ul>
+      <p className="mt-4">To exercise any of these rights, please email us at <a href="mailto:hello@softogram.com" className="text-cyan-400 hover:underline">hello@softogram.com</a></p>
+    </PolicySection>
+
+    <PolicySection title="Changes to This Policy">
+      <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date. We encourage you to review this policy periodically.</p>
+    </PolicySection>
+
+    <PolicySection title="Contact Us">
+      <p>If you have any questions about this Privacy Policy, please contact us at:</p>
+      <p className="mt-2"><strong className="text-white">Email:</strong> <a href="mailto:hello@softogram.com" className="text-cyan-400 hover:underline">hello@softogram.com</a></p>
+    </PolicySection>
+  </PolicyLayout>
+);
+
+// Terms and Conditions Page
+const TermsAndConditions = () => (
+  <PolicyLayout title="Terms & Conditions" lastUpdated="March 2026">
+    <PolicySection title="Acceptance of Terms">
+      <p>By engaging Softogram's services, accessing our website, or entering into any agreement with us, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use our services.</p>
+    </PolicySection>
+
+    <PolicySection title="Services">
+      <p>Softogram provides custom software development services, including but not limited to:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Web application development</li>
+        <li>Business and portfolio websites</li>
+        <li>E-commerce platform development</li>
+        <li>API development and microservices</li>
+        <li>Enterprise software solutions</li>
+        <li>Game development</li>
+        <li>AI-powered automation and consulting</li>
+      </ul>
+    </PolicySection>
+
+    <PolicySection title="Project Engagement">
+      <p>All projects begin with a signed proposal outlining scope, deliverables, timeline, and pricing. An advance payment of 40–50% of the total project cost is required before work commences. The remaining balance is due upon project completion or as specified in the project agreement.</p>
+    </PolicySection>
+
+    <PolicySection title="Intellectual Property">
+      <p>Upon receipt of full and final payment:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Full ownership of all custom code, designs, and deliverables transfers to the client</li>
+        <li>Softogram retains the right to display the work in our portfolio (unless otherwise agreed)</li>
+        <li>Third-party libraries and frameworks remain subject to their respective licenses</li>
+      </ul>
+    </PolicySection>
+
+    <PolicySection title="Confidentiality">
+      <p>Softogram agrees to keep all client project details, business information, and proprietary data strictly confidential. We will not disclose any information to third parties without explicit written consent, except as required by law.</p>
+    </PolicySection>
+
+    <PolicySection title="Revisions & Scope">
+      <p>Revisions are limited to the agreed project scope as defined in the proposal. Additional work, features, or changes outside the original scope will be quoted and billed separately. Change requests must be submitted in writing and approved by both parties.</p>
+    </PolicySection>
+
+    <PolicySection title="Payment Terms">
+      <p>All invoices are due within 7 days of issuance unless otherwise specified. Late payments will attract interest at the rate of 2% per month on the outstanding amount. Softogram reserves the right to suspend work on projects with overdue payments.</p>
+    </PolicySection>
+
+    <PolicySection title="Limitation of Liability">
+      <p>Softogram shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from the use of our software or services. Our total liability shall not exceed the amount paid by the client for the specific services giving rise to the claim.</p>
+    </PolicySection>
+
+    <PolicySection title="Termination">
+      <p>Either party may terminate the agreement with 14 days written notice. Upon termination:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>All work completed to date will be delivered and billed</li>
+        <li>Any advance payment for incomplete work will be adjusted based on work delivered</li>
+        <li>Client must pay for all work completed up to the termination date</li>
+      </ul>
+    </PolicySection>
+
+    <PolicySection title="Governing Law">
+      <p>These Terms and Conditions are governed by and construed in accordance with the laws of India. Any disputes arising from these terms shall be subject to the exclusive jurisdiction of the courts in Uttar Pradesh, India.</p>
+    </PolicySection>
+  </PolicyLayout>
+);
+
+// Refund Policy Page
+const RefundPolicy = () => (
+  <PolicyLayout title="Refund & Cancellation Policy" lastUpdated="March 2026">
+    <PolicySection title="Advance Payment">
+      <p>The initial deposit (40–50% of project cost) is non-refundable once project work has commenced. This advance covers initial planning, resource allocation, and preliminary development work.</p>
+    </PolicySection>
+
+    <PolicySection title="Mid-Project Cancellation">
+      <p>If a project is cancelled after work has begun:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>All work completed to date will be billed at our standard hourly rate</li>
+        <li>Any remaining advance payment will be adjusted accordingly</li>
+        <li>Completed deliverables will be transferred to the client upon payment settlement</li>
+        <li>A detailed breakdown of work completed will be provided</li>
+      </ul>
+    </PolicySection>
+
+    <PolicySection title="Delivery Disputes">
+      <p>If delivered work significantly deviates from the agreed scope and specifications:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>We will first offer free revisions to address the discrepancies</li>
+        <li>The scope of free revisions is limited to the original project requirements</li>
+        <li>Disputes must be raised within 7 days of delivery</li>
+        <li>Both parties will work in good faith to resolve any issues</li>
+      </ul>
+    </PolicySection>
+
+    <PolicySection title="Refund Eligibility">
+      <p>Full refunds are only considered under the following circumstances:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>No work has been started within 7 days of payment</li>
+        <li>Softogram is unable to deliver the agreed services</li>
+        <li>Mutual agreement between both parties</li>
+      </ul>
+      <p className="mt-4">Partial refunds may be considered on a case-by-case basis for extenuating circumstances.</p>
+    </PolicySection>
+
+    <PolicySection title="Refund Process">
+      <p>To request a refund:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Send a written request to <a href="mailto:hello@softogram.com" className="text-cyan-400 hover:underline">hello@softogram.com</a> within 7 days of payment</li>
+        <li>Include your project details and reason for the refund request</li>
+        <li>Our team will review your request within 3–5 business days</li>
+        <li>Approved refunds will be processed within 7–10 business days</li>
+      </ul>
+    </PolicySection>
+  </PolicyLayout>
+);
+
+// Cookie Policy Page
+const CookiePolicy = () => (
+  <PolicyLayout title="Cookie Policy" lastUpdated="March 2026">
+    <PolicySection title="What Are Cookies?">
+      <p>Cookies are small text files stored on your device when you visit a website. They help websites remember your preferences and understand how you interact with the site.</p>
+    </PolicySection>
+
+    <PolicySection title="How We Use Cookies">
+      <p>We use cookies for the following purposes:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li><strong className="text-white">Essential Cookies:</strong> Required for basic website functionality</li>
+        <li><strong className="text-white">Analytics Cookies:</strong> Help us understand how visitors use our website through Google Analytics</li>
+        <li><strong className="text-white">Preference Cookies:</strong> Remember your settings and preferences</li>
+      </ul>
+    </PolicySection>
+
+    <PolicySection title="Google Analytics">
+      <p>We use Google Analytics to collect anonymous information about how visitors use our website. This includes:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Pages visited and time spent on each page</li>
+        <li>How you arrived at our website</li>
+        <li>Your general geographic location (country/city level)</li>
+        <li>Device and browser information</li>
+      </ul>
+      <p className="mt-4">This data helps us improve our website and provide a better user experience. Google Analytics data is anonymized and does not personally identify you.</p>
+    </PolicySection>
+
+    <PolicySection title="Managing Cookies">
+      <p>You can control and manage cookies through your browser settings. Most browsers allow you to:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>View and delete cookies</li>
+        <li>Block all cookies or specific types</li>
+        <li>Set preferences for certain websites</li>
+      </ul>
+      <p className="mt-4">Please note that disabling certain cookies may affect the functionality of our website.</p>
+    </PolicySection>
+
+    <PolicySection title="Opt-Out Options">
+      <p>To opt out of Google Analytics tracking, you can:</p>
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Install the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">Google Analytics Opt-out Browser Add-on</a></li>
+        <li>Adjust your browser settings to block cookies</li>
+        <li>Use private/incognito browsing mode</li>
+      </ul>
+    </PolicySection>
+
+    <PolicySection title="Contact Us">
+      <p>If you have questions about our use of cookies, please contact us at <a href="mailto:hello@softogram.com" className="text-cyan-400 hover:underline">hello@softogram.com</a></p>
+    </PolicySection>
+  </PolicyLayout>
+);
+
 // Home Page
 const Home = () => {
   return (
@@ -1104,6 +1615,7 @@ const Home = () => {
       <HeroSection />
       <StatsSection />
       <ServicesSection />
+      <CaseStudiesSection />
       <PricingSection />
       <ProjectsSection />
       <TestimonialsSection />
@@ -1115,13 +1627,36 @@ const Home = () => {
   );
 };
 
+// Scroll to hash on navigation
+const ScrollToHash = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location]);
+
+  return null;
+};
+
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <ScrollToHash />
         <Toaster position="top-center" richColors theme="dark" />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/cookie-policy" element={<CookiePolicy />} />
         </Routes>
       </BrowserRouter>
     </div>
