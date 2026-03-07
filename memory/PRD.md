@@ -1,25 +1,28 @@
 # Softogram Website - PRD
 
 ## Original Problem Statement
-Build a complete, modern, fully responsive website for a software company called "Softogram" with:
-- Brand Identity: Deep navy blue (#0A0F2C) primary, electric blue (#3B82F6) accent
+Build a premium, dark-themed website for Softogram software company with:
+- Brand Identity: Pure black (#000000), cyan (#00F5FF), violet (#7C3AED) accents
 - Tagline: "Your idea. Our code. Delivered."
-- Sections: Hero, Stats, Services, Pricing, Portfolio, Testimonials, Why Choose Us, Contact, Footer
-- Contact form with SendGrid email integration
+- Fonts: Space Grotesk (headings), Inter (body)
+- Style: Dark glassmorphism, neon glow effects, dot pattern background
+- Sections: Hero, Stats, Services (8), Pricing, Portfolio, Testimonials, Why Choose Us, Contact, Footer
+- Contact form with SendGrid email integration + Budget Range dropdown
 - WhatsApp floating button
 
 ## User Personas
 1. **SMB Owners** - Small/medium business owners in India looking for software development services
 2. **Startup Founders** - Tech-savvy founders needing custom web applications
 3. **E-commerce Merchants** - Business owners looking for online stores
+4. **Enterprise Clients** - Companies needing AI automation, game development, enterprise tools
 
 ## Core Requirements (Static)
+- Premium dark theme with futuristic aesthetic
 - Responsive design for all devices
 - Smooth scroll navigation
-- Animated sections with scroll reveal
-- Contact form with email notification
+- Glassmorphism cards with cyan neon glow on hover
+- Contact form with email notification + budget range
 - WhatsApp quick contact option
-- Professional, trustworthy design
 
 ## Architecture
 - **Frontend**: React 19 with Tailwind CSS, Framer Motion, shadcn/ui
@@ -27,19 +30,20 @@ Build a complete, modern, fully responsive website for a software company called
 - **Email**: SendGrid (configurable via environment variables)
 
 ## What's Been Implemented
-### December 2025
-- [x] Full responsive website with all 9 sections
-- [x] Animated hero with gradient orbs and floating code snippet
-- [x] Stats counter with 4 metrics (CountUp animation)
-- [x] Services bento grid (6 services)
-- [x] Pricing cards (3 tiers with Growth marked popular)
+### December 2025 - v2 (Premium Dark Theme)
+- [x] Premium pure black design with cyan/violet accents
+- [x] Hero with dot pattern background and typing code animation
+- [x] Stats counter with 4 metrics (15+ projects, 10+ clients, 3+ years, 100%)
+- [x] Services grid expanded to 8 services (added Game Dev, AI Automation, Enterprise Tools, Scalability)
+- [x] Pricing cards with "Most Popular" cyan glow badge
 - [x] Portfolio grid (3 projects with tech tags)
-- [x] Testimonials marquee (3 clients)
+- [x] Testimonials marquee with avatar initials
 - [x] Why Choose Us (4 features)
-- [x] Contact form with SendGrid integration
-- [x] WhatsApp floating button
-- [x] Sticky glassmorphism navbar with mobile menu
-- [x] Footer with links and social icons
+- [x] Contact form with Budget Range dropdown + SendGrid integration
+- [x] WhatsApp floating button with pulse animation
+- [x] Glassmorphism navbar with sticky behavior
+- [x] Footer with gradient border top
+- [x] Space Grotesk + Inter fonts
 - [x] Backend API: POST /api/contact
 
 ## Environment Variables
