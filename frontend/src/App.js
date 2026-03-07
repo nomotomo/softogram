@@ -40,7 +40,8 @@ import {
   Cloud,
   GitBranch,
   Terminal,
-  Monitor
+  Monitor,
+  Smartphone
 } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
@@ -244,122 +245,125 @@ const Navbar = () => {
 
   const navLinks = isHomePage ? [
     { href: "#services", label: "Services" },
+    { href: "/case-studies", label: "Case Studies", isRoute: true },
     { href: "#pricing", label: "Pricing" },
-    { href: "#portfolio", label: "Work" },
+    { href: "/blog", label: "Blog", isRoute: true },
     { href: "#contact", label: "Contact" }
   ] : [
-    { href: "/", label: "Home" },
+    { href: "/", label: "Home", isRoute: true },
     { href: "/#services", label: "Services" },
-    { href: "/#pricing", label: "Pricing" },
+    { href: "/case-studies", label: "Case Studies", isRoute: true },
+    { href: "/blog", label: "Blog", isRoute: true },
     { href: "/#contact", label: "Contact" }
   ];
 
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-4 left-4 right-4 z-50 rounded-2xl px-4 py-3 flex items-center justify-between transition-all duration-300 max-w-screen-lg mx-auto ${
-        scrolled ? "navbar-glass shadow-2xl" : "bg-black/50 backdrop-blur-md border border-white/10"
-      }`}
-      style={{ left: '50%', right: 'auto', transform: 'translateX(-50%)', width: 'calc(100% - 32px)', maxWidth: '1000px' }}
-      data-testid="navbar"
-    >
-      <Link to="/" className="flex items-center" data-testid="logo-link">
-        <SoftogramLogo size="small" />
-      </Link>
+    <div className="fixed top-0 left-0 right-0 z-50 px-4 pt-4">
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className={`mx-auto max-w-5xl rounded-2xl px-4 md:px-6 py-3 flex items-center justify-between transition-all duration-300 ${
+          scrolled ? "navbar-glass shadow-2xl" : "bg-black/50 backdrop-blur-md border border-white/10"
+        }`}
+        data-testid="navbar"
+      >
+        <Link to="/" className="flex items-center" data-testid="logo-link">
+          <SoftogramLogo size="small" />
+        </Link>
 
-      {/* Desktop Nav */}
-      <div className="hidden xl:flex items-center gap-5">
-        {navLinks.map((link) => (
-          link.href.startsWith("#") || link.href.includes("#") ? (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium whitespace-nowrap"
-              data-testid={`nav-link-${link.label.toLowerCase().replace(" ", "-")}`}
-            >
-              {link.label}
+        {/* Desktop Nav */}
+        <div className="hidden lg:flex items-center gap-6">
+          {navLinks.map((link) => (
+            link.isRoute ? (
+              <Link
+                key={link.href}
+                to={link.href}
+                className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium whitespace-nowrap"
+                data-testid={`nav-link-${link.label.toLowerCase().replace(" ", "-")}`}
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium whitespace-nowrap"
+                data-testid={`nav-link-${link.label.toLowerCase().replace(" ", "-")}`}
+              >
+                {link.label}
+              </a>
+            )
+          ))}
+          {isHomePage ? (
+            <a href="#contact">
+              <button className="btn-glow text-sm px-5 py-2 whitespace-nowrap" data-testid="nav-cta-button">
+                Start Project
+              </button>
             </a>
           ) : (
-            <Link
-              key={link.href}
-              to={link.href}
-              className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium whitespace-nowrap"
-              data-testid={`nav-link-${link.label.toLowerCase()}`}
-            >
-              {link.label}
+            <Link to="/#contact">
+              <button className="btn-glow text-sm px-5 py-2 whitespace-nowrap" data-testid="nav-cta-button">
+                Start Project
+              </button>
             </Link>
-          )
-        ))}
-        {isHomePage ? (
-          <a href="#contact" className="ml-2">
-            <button className="btn-glow text-sm px-5 py-2 whitespace-nowrap" data-testid="nav-cta-button">
-              Start Project
-            </button>
-          </a>
-        ) : (
-          <Link to="/#contact" className="ml-2">
-            <button className="btn-glow text-sm px-5 py-2 whitespace-nowrap" data-testid="nav-cta-button">
-              Start Project
-            </button>
-          </Link>
-        )}
-      </div>
+          )}
+        </div>
 
-      {/* Mobile Menu Button */}
-      <button
-        className="xl:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        data-testid="mobile-menu-toggle"
-      >
-        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+        {/* Mobile Menu Button */}
+        <button
+          className="lg:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          data-testid="mobile-menu-toggle"
+        >
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 mt-2 navbar-glass rounded-2xl p-4 xl:hidden"
-            data-testid="mobile-menu"
-          >
-            <div className="flex flex-col gap-1">
-              {navLinks.map((link) => (
-                link.href.startsWith("#") ? (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="text-gray-400 hover:text-cyan-400 hover:bg-white/5 transition-colors text-base font-medium py-3 px-4 rounded-lg"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.label}
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-full left-0 right-0 mt-2 navbar-glass rounded-2xl p-4 lg:hidden"
+              data-testid="mobile-menu"
+            >
+              <div className="flex flex-col gap-1">
+                {navLinks.map((link) => (
+                  link.isRoute ? (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      className="text-gray-400 hover:text-cyan-400 hover:bg-white/5 transition-colors text-base font-medium py-3 px-4 rounded-lg"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className="text-gray-400 hover:text-cyan-400 hover:bg-white/5 transition-colors text-base font-medium py-3 px-4 rounded-lg"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </a>
+                  )
+                ))}
+                <div className="pt-2 mt-2 border-t border-white/10">
+                  <a href={isHomePage ? "#contact" : "/#contact"} onClick={() => setMobileMenuOpen(false)}>
+                    <button className="btn-glow w-full py-3 text-sm">
+                      Start Project
+                    </button>
                   </a>
-                ) : (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className="text-gray-400 hover:text-cyan-400 hover:bg-white/5 transition-colors text-base font-medium py-3 px-4 rounded-lg"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                )
-              ))}
-              <div className="pt-2 mt-2 border-t border-white/10">
-                <a href={isHomePage ? "#contact" : "/#contact"} onClick={() => setMobileMenuOpen(false)}>
-                  <button className="btn-glow w-full py-3 text-sm">
-                    Start Project
-                  </button>
-                </a>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
+    </div>
   );
 };
 
@@ -1681,6 +1685,430 @@ const CookiePolicy = () => (
   </PolicyLayout>
 );
 
+// Case Studies Page
+const CaseStudiesPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const caseStudies = [
+    {
+      id: "polluxkart",
+      title: "Polluxkart",
+      subtitle: "Full-Stack E-commerce Platform",
+      description: "A complete e-commerce solution built from the ground up, featuring a modern React frontend, FastAPI Python backend, and microservices architecture deployed on AWS.",
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop",
+      challenge: "The client needed a scalable e-commerce platform that could handle thousands of concurrent users, integrate multiple payment gateways, and provide real-time inventory management across multiple warehouses.",
+      solution: "We architected a microservices-based system with separate services for user management, product catalog, orders, payments, and inventory. Each service was containerized using Docker and deployed on AWS ECS with auto-scaling capabilities.",
+      results: [
+        { metric: "99.9%", label: "Uptime Achieved" },
+        { metric: "< 200ms", label: "Average API Response" },
+        { metric: "10,000+", label: "Concurrent Users" },
+        { metric: "3x", label: "Sales Increase" }
+      ],
+      techStack: [
+        { name: "React.js", icon: Monitor, category: "Frontend" },
+        { name: "FastAPI", icon: Terminal, category: "Backend" },
+        { name: "Node.js", icon: Server, category: "Services" },
+        { name: "PostgreSQL", icon: Database, category: "Database" },
+        { name: "Redis", icon: Zap, category: "Caching" },
+        { name: "Docker", icon: Layers, category: "Container" },
+        { name: "AWS", icon: Cloud, category: "Cloud" },
+        { name: "GitHub Actions", icon: GitBranch, category: "CI/CD" }
+      ],
+      architecture: [
+        { phase: "Frontend", description: "React.js with Redux for state management, Tailwind CSS for styling, deployed on AWS CloudFront CDN" },
+        { phase: "API Gateway", description: "FastAPI with async request handling, JWT authentication, rate limiting, and request validation" },
+        { phase: "Microservices", description: "Node.js services for real-time features (chat, notifications), Python services for ML-based recommendations" },
+        { phase: "Database Layer", description: "PostgreSQL for transactional data, Redis for caching and session management, Elasticsearch for product search" },
+        { phase: "Infrastructure", description: "AWS ECS for container orchestration, RDS for managed databases, S3 for media storage, CloudWatch for monitoring" }
+      ]
+    },
+    {
+      id: "expense-splitter",
+      title: "Expense Splitter App",
+      subtitle: "Real-time Group Expense Management",
+      description: "A Splitwise-like application for splitting group expenses with real-time balance tracking and smart settlement suggestions.",
+      image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=500&fit=crop",
+      challenge: "Building an intuitive expense tracking app that handles complex multi-party settlements, supports multiple currencies, and works offline with sync capabilities.",
+      solution: "Developed a robust backend with Spring Boot handling complex settlement algorithms, combined with a responsive web app featuring offline-first capabilities using service workers.",
+      results: [
+        { metric: "50K+", label: "Expenses Tracked" },
+        { metric: "98%", label: "Accuracy Rate" },
+        { metric: "5K+", label: "Active Users" },
+        { metric: "4.8", label: "App Rating" }
+      ],
+      techStack: [
+        { name: "Java", icon: Code, category: "Backend" },
+        { name: "Spring Boot", icon: Server, category: "Framework" },
+        { name: "PostgreSQL", icon: Database, category: "Database" },
+        { name: "React Native", icon: Smartphone, category: "Mobile" },
+        { name: "Redis", icon: Zap, category: "Caching" },
+        { name: "Docker", icon: Layers, category: "Container" }
+      ],
+      architecture: [
+        { phase: "Mobile App", description: "React Native for cross-platform mobile development with offline-first architecture" },
+        { phase: "Backend API", description: "Spring Boot REST API with complex settlement algorithms and multi-currency support" },
+        { phase: "Real-time Sync", description: "WebSocket connections for instant updates when group members add expenses" },
+        { phase: "Database", description: "PostgreSQL with optimized queries for balance calculations and expense history" }
+      ]
+    },
+    {
+      id: "api-gateway",
+      title: "Custom API Gateway",
+      subtitle: "High-Performance Microservices Gateway",
+      description: "A high-performance API gateway handling routing, authentication and rate limiting for a microservices architecture.",
+      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=500&fit=crop",
+      challenge: "Design a gateway capable of handling 100K+ requests per second with sub-millisecond latency, supporting dynamic routing and real-time configuration updates.",
+      solution: "Built with Go for maximum performance, implementing a plugin-based architecture for extensibility. Features include JWT validation, rate limiting per client, request/response transformation, and comprehensive logging.",
+      results: [
+        { metric: "100K+", label: "Requests/Second" },
+        { metric: "< 1ms", label: "Added Latency" },
+        { metric: "99.99%", label: "Availability" },
+        { metric: "Zero", label: "Downtime Deploys" }
+      ],
+      techStack: [
+        { name: "Go", icon: Terminal, category: "Language" },
+        { name: "gRPC", icon: Server, category: "Protocol" },
+        { name: "Redis", icon: Database, category: "Cache" },
+        { name: "Docker", icon: Layers, category: "Container" },
+        { name: "Kubernetes", icon: Cloud, category: "Orchestration" },
+        { name: "Prometheus", icon: Zap, category: "Monitoring" }
+      ],
+      architecture: [
+        { phase: "Gateway Core", description: "Go-based HTTP server with connection pooling and graceful shutdown" },
+        { phase: "Plugin System", description: "Modular middleware chain for auth, rate limiting, logging, and transformation" },
+        { phase: "Config Management", description: "Real-time configuration via etcd with zero-downtime updates" },
+        { phase: "Monitoring", description: "Prometheus metrics, Jaeger tracing, and ELK stack for logging" }
+      ]
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-black">
+      <Navbar />
+      
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 px-4">
+        <div className="container-custom text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-['Space_Grotesk']">
+              <span className="gradient-text">Case Studies</span>
+            </h1>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Deep dives into our most impactful projects. See how we approach complex challenges 
+              from architecture to deployment.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Case Studies List */}
+      <section className="pb-20 px-4">
+        <div className="container-custom">
+          <div className="space-y-24">
+            {caseStudies.map((study, index) => (
+              <motion.div
+                key={study.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6 }}
+                className="glass-card p-8 md:p-12"
+              >
+                {/* Header */}
+                <div className="flex flex-col lg:flex-row gap-8 mb-12">
+                  <div className="lg:w-1/2">
+                    <span className="text-cyan-400 text-sm font-semibold uppercase tracking-wider">
+                      Case Study #{index + 1}
+                    </span>
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mt-2 mb-4 font-['Space_Grotesk']">
+                      {study.title}
+                    </h2>
+                    <p className="text-xl text-gray-400 mb-6">{study.subtitle}</p>
+                    <p className="text-gray-500 leading-relaxed">{study.description}</p>
+                  </div>
+                  <div className="lg:w-1/2">
+                    <img 
+                      src={study.image} 
+                      alt={study.title}
+                      className="w-full h-64 lg:h-80 object-cover rounded-xl"
+                    />
+                  </div>
+                </div>
+
+                {/* Results */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                  {study.results.map((result, i) => (
+                    <div key={i} className="text-center p-4 md:p-6 bg-[#111111] rounded-xl border border-[#2A2A2A]">
+                      <div className="text-xl md:text-2xl font-bold gradient-text mb-1">{result.metric}</div>
+                      <p className="text-gray-500 text-xs md:text-sm">{result.label}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Challenge & Solution */}
+                <div className="grid md:grid-cols-2 gap-6 mb-12">
+                  <div className="p-6 bg-[#111111] rounded-xl border-l-4 border-cyan-400">
+                    <h4 className="text-lg font-bold text-white mb-3 font-['Space_Grotesk']">The Challenge</h4>
+                    <p className="text-gray-500 text-sm leading-relaxed">{study.challenge}</p>
+                  </div>
+                  <div className="p-6 bg-[#111111] rounded-xl border-l-4 border-violet-500">
+                    <h4 className="text-lg font-bold text-white mb-3 font-['Space_Grotesk']">Our Solution</h4>
+                    <p className="text-gray-500 text-sm leading-relaxed">{study.solution}</p>
+                  </div>
+                </div>
+
+                {/* Tech Stack */}
+                <div className="mb-12">
+                  <h4 className="text-lg font-bold text-white mb-4 font-['Space_Grotesk']">Technology Stack</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                    {study.techStack.map((tech, i) => (
+                      <div key={i} className="flex items-center gap-2 p-3 bg-[#111111] rounded-lg border border-[#2A2A2A]">
+                        <tech.icon className="w-4 h-4 text-cyan-400" />
+                        <div>
+                          <p className="text-white font-medium text-xs">{tech.name}</p>
+                          <p className="text-gray-600 text-[10px]">{tech.category}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Architecture */}
+                <div>
+                  <h4 className="text-lg font-bold text-white mb-4 font-['Space_Grotesk']">Architecture</h4>
+                  <div className="space-y-3">
+                    {study.architecture.map((item, i) => (
+                      <div key={i} className="flex gap-3 p-4 bg-[#111111] rounded-xl border border-[#2A2A2A]">
+                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500 to-violet-600 flex items-center justify-center text-black font-bold text-xs flex-shrink-0">
+                          {i + 1}
+                        </div>
+                        <div>
+                          <h5 className="text-white font-semibold text-sm mb-1">{item.phase}</h5>
+                          <p className="text-gray-500 text-xs">{item.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="text-center mt-16">
+            <h3 className="text-2xl font-bold text-white mb-4 font-['Space_Grotesk']">
+              Ready to Build Your Next Project?
+            </h3>
+            <p className="text-gray-400 mb-8">
+              Let's discuss how we can help bring your vision to life.
+            </p>
+            <Link to="/#contact">
+              <button className="btn-glow">
+                Start Your Project
+                <ArrowRight className="w-5 h-5 ml-2 inline" />
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+      <WhatsAppButton />
+    </div>
+  );
+};
+
+// Blog Page
+const BlogPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const blogPosts = [
+    {
+      id: 1,
+      title: "Building Scalable E-commerce Platforms: Lessons from Polluxkart",
+      excerpt: "Discover the architectural decisions and technologies we used to build a platform handling 10,000+ concurrent users.",
+      date: "March 2026",
+      readTime: "8 min read",
+      category: "Architecture",
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop"
+    },
+    {
+      id: 2,
+      title: "Why We Chose FastAPI Over Flask for Our Backend Services",
+      excerpt: "A deep dive into our decision to use FastAPI and how it improved our API performance by 3x.",
+      date: "February 2026",
+      readTime: "6 min read",
+      category: "Backend",
+      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop"
+    },
+    {
+      id: 3,
+      title: "Microservices vs Monolith: When to Choose What",
+      excerpt: "Our practical guide to choosing the right architecture for your project based on real-world experience.",
+      date: "January 2026",
+      readTime: "10 min read",
+      category: "Architecture",
+      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop"
+    },
+    {
+      id: 4,
+      title: "Implementing Real-time Features with WebSockets",
+      excerpt: "How we built real-time notifications and chat features for our expense splitter application.",
+      date: "December 2025",
+      readTime: "7 min read",
+      category: "Development",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop"
+    },
+    {
+      id: 5,
+      title: "AWS ECS vs Kubernetes: Our Production Experience",
+      excerpt: "Comparing container orchestration platforms based on our experience running production workloads.",
+      date: "November 2025",
+      readTime: "9 min read",
+      category: "DevOps",
+      image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=600&h=400&fit=crop"
+    },
+    {
+      id: 6,
+      title: "Optimizing React Performance: Tips from the Trenches",
+      excerpt: "Practical tips and techniques we use to keep our React applications fast and responsive.",
+      date: "October 2025",
+      readTime: "5 min read",
+      category: "Frontend",
+      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600&h=400&fit=crop"
+    }
+  ];
+
+  const categories = ["All", "Architecture", "Backend", "Frontend", "DevOps", "Development"];
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredPosts = activeCategory === "All" 
+    ? blogPosts 
+    : blogPosts.filter(post => post.category === activeCategory);
+
+  return (
+    <div className="min-h-screen bg-black">
+      <Navbar />
+      
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 px-4">
+        <div className="container-custom text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-['Space_Grotesk']">
+              <span className="gradient-text">Blog & Insights</span>
+            </h1>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Technical articles, development insights, and lessons learned from building 
+              production software.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Category Filter */}
+      <section className="pb-8 px-4">
+        <div className="container-custom">
+          <div className="flex flex-wrap justify-center gap-3">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  activeCategory === category
+                    ? "bg-gradient-to-r from-cyan-500 to-violet-600 text-black"
+                    : "bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10"
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Posts Grid */}
+      <section className="pb-20 px-4">
+        <div className="container-custom">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredPosts.map((post, index) => (
+              <motion.article
+                key={post.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="glass-card overflow-hidden group cursor-pointer"
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-black/70 backdrop-blur-sm text-cyan-400 text-xs font-medium rounded-full">
+                      {post.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
+                    <span>{post.date}</span>
+                    <span>•</span>
+                    <span>{post.readTime}</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-3 font-['Space_Grotesk'] group-hover:text-cyan-400 transition-colors line-clamp-2">
+                    {post.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm line-clamp-3">{post.excerpt}</p>
+                  <div className="mt-4 flex items-center text-cyan-400 text-sm font-medium group-hover:gap-2 transition-all">
+                    Read More <ArrowRight className="w-4 h-4 ml-1" />
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+
+          {/* Coming Soon Notice */}
+          <div className="text-center mt-16 glass-card p-8">
+            <h3 className="text-xl font-bold text-white mb-3 font-['Space_Grotesk']">
+              More Articles Coming Soon
+            </h3>
+            <p className="text-gray-400 mb-6">
+              We're working on more technical content. Subscribe to get notified when we publish new articles.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="input-dark flex-grow"
+              />
+              <button className="btn-glow whitespace-nowrap">
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+      <WhatsAppButton />
+    </div>
+  );
+};
+
 // Home Page
 const Home = () => {
   return (
@@ -1689,7 +2117,6 @@ const Home = () => {
       <HeroSection />
       <StatsSection />
       <ServicesSection />
-      <CaseStudiesSection />
       <PricingSection />
       <ProjectsSection />
       <TestimonialsSection />
@@ -1727,6 +2154,8 @@ function App() {
         <Toaster position="top-center" richColors theme="dark" />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/case-studies" element={<CaseStudiesPage />} />
+          <Route path="/blog" element={<BlogPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
