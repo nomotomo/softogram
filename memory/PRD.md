@@ -46,6 +46,20 @@ Build a premium, dark-themed website for Softogram software company with:
 - [x] Space Grotesk + Inter fonts
 - [x] Backend API: POST /api/contact
 
+### December 2025 - v3 (Case Studies + Policy Pages)
+- [x] New redesigned logo with abstract S shape and cyan "gram" highlight
+- [x] Fixed navbar gap from top (top-6)
+- [x] Case Studies section with Polluxkart deep dive
+- [x] Architecture breakdown: Frontend, API Gateway, Microservices, Database Layer, Infrastructure
+- [x] Tech stack display: React.js, FastAPI, Node.js, PostgreSQL, Redis, Docker, AWS, GitHub Actions
+- [x] Instagram and Facebook social icons added
+- [x] Privacy Policy page (/privacy-policy)
+- [x] Terms & Conditions page (/terms-and-conditions)
+- [x] Refund Policy page (/refund-policy)
+- [x] Cookie Policy page (/cookie-policy)
+- [x] Footer Legal column with all policy links
+- [x] Policy pages with dark theme and cyan left border on headings
+
 ## Environment Variables
 ```
 # Backend (.env)
