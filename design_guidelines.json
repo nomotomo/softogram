@@ -1,0 +1,122 @@
+{
+  "brand_identity": {
+    "name": "Softogram",
+    "tagline": "Your idea. Our code. Delivered.",
+    "tone": "Premium, Technical, Trustworthy, Modern",
+    "theme_mode": "dark",
+    "primary_color": "#0A0F2C",
+    "accent_color": "#3B82F6",
+    "secondary_accent": "#7C3AED",
+    "surface_color": "#111827",
+    "text_primary": "#F8FAFC",
+    "text_secondary": "#94A3B8"
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Plus Jakarta Sans, sans-serif",
+      "weights": ["600", "700", "800"],
+      "letter_spacing": "-0.02em"
+    },
+    "body": {
+      "font_family": "Inter, sans-serif",
+      "weights": ["400", "500"],
+      "letter_spacing": "0em"
+    }
+  },
+  "layout_strategy": {
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "spacing": {
+      "section_gap": "py-24 md:py-32",
+      "element_gap": "gap-8"
+    },
+    "grid_system": "Bento Grid (Mode A) for Services, Standard Grid for Features"
+  },
+  "ui_components": {
+    "buttons": {
+      "primary": "bg-primary text-white hover:bg-primary/90 shadow-[0_0_20px_rgba(59,130,246,0.5)] rounded-full px-8 py-3 font-semibold transition-all hover:scale-105",
+      "secondary": "bg-transparent border border-white/20 text-white hover:bg-white/10 rounded-full px-8 py-3 font-semibold backdrop-blur-sm"
+    },
+    "cards": {
+      "base": "bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md hover:border-white/20 transition-all duration-300 group overflow-hidden",
+      "hover_effect": "hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] hover:-translate-y-1"
+    },
+    "navbar": {
+      "style": "fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl bg-black/50 border border-white/10 rounded-full backdrop-blur-xl z-50 px-6 py-4 flex items-center justify-between shadow-2xl"
+    }
+  },
+  "sections": {
+    "hero": {
+      "style": "min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden",
+      "elements": [
+        "Massive Gradient Orb (Background)",
+        "3D Floating Code Snippet (Right/Center)",
+        "Animated Text Reveal"
+      ]
+    },
+    "stats": {
+      "style": "py-12 border-y border-white/5 bg-black/20 backdrop-blur-sm"
+    },
+    "services": {
+      "layout": "Bento Grid (3 columns)",
+      "cards": [
+        { "title": "Custom Web Apps", "span": "col-span-1 md:col-span-2" },
+        { "title": "Business Websites", "span": "col-span-1" },
+        { "title": "E-commerce", "span": "col-span-1" },
+        { "title": "API Development", "span": "col-span-1 md:col-span-2" }
+      ]
+    },
+    "projects": {
+      "style": "Horizontal Parallax Scroll or Grid with large thumbnails"
+    },
+    "testimonials": {
+      "style": "Marquee or Grid with User Avatars"
+    }
+  },
+  "assets": {
+    "images": {
+      "hero_bg": "https://images.unsplash.com/photo-1642792348000-7227fe9a2807?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMDNkJTIwZ2xhc3MlMjBzaGFwZXMlMjBibHVlJTIwZGFyayUyMGJhY2tncm91bmQlMjB0ZWNobm9sb2d5fGVufDB8fHx8MTc3Mjg4MzE3OXww&ixlib=rb-4.1.0&q=85",
+      "abstract_shapes": [
+        "https://images.unsplash.com/photo-1763259503114-251ed54d6d48?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMDNkJTIwZ2xhc3MlMjBzaGFwZXMlMjBibHVlJTIwZGFyayUyMGJhY2tncm91bmQlMjB0ZWNobm9sb2d5fGVufDB8fHx8MTc3Mjg4MzE3OXww&ixlib=rb-4.1.0&q=85",
+        "https://images.unsplash.com/photo-1632475591273-ad545e7b36a1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwzfHxhYnN0cmFjdCUyMDNkJTIwZ2xhc3MlMjBzaGFwZXMlMjBibHVlJTIwZGFyayUyMGJhY2tncm91bmQlMjB0ZWNobm9sb2d5fGVufDB8fHx8MTc3Mjg4MzE3OXww&ixlib=rb-4.1.0&q=85"
+      ],
+      "projects": [
+        "https://images.unsplash.com/photo-1616441064539-b4fceed1f01f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBzYWFzJTIwZGFzaGJvYXJkJTIwdWklMjBkYXJrJTIwbW9kZSUyMG1vY2t1cHxlbnwwfHx8fDE3NzI4ODMxOTN8MA&ixlib=rb-4.1.0&q=85",
+        "https://images.unsplash.com/photo-1575388902449-6bca946ad549?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBzYWFzJTIwZGFzaGJvYXJkJTIwdWklMjBkYXJrJTIwbW9kZSUyMG1vY2t1cHxlbnwwfHx8fDE3NzI4ODMxOTN8MA&ixlib=rb-4.1.0&q=85"
+      ],
+      "testimonials": [
+        "https://images.unsplash.com/photo-1727312413225-61d74356508f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTN8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBzb2Z0d2FyZSUyMGRldmVsb3BlciUyMHByb2Zlc3Npb25hbCUyMHBvcnRyYWl0JTIwc21pbGluZ3xlbnwwfHx8fDE3NzI4ODMxOTF8MA&ixlib=rb-4.1.0&q=85",
+        "https://images.unsplash.com/photo-1669773793594-e8d4615deb7c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTN8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBzb2Z0d2FyZSUyMGRldmVsb3BlciUyMHByb2Zlc3Npb25hbCUyMHBvcnRyYWl0JTIwc21pbGluZ3xlbnwwfHx8fDE3NzI4ODMxOTF8MA&ixlib=rb-4.1.0&q=85",
+        "https://images.unsplash.com/flagged/photo-1565293219648-a3d94b5d1def?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTN8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBzb2Z0d2FyZSUyMGRldmVsb3BlciUyMHByb2Zlc3Npb25hbCUyMHBvcnRyYWl0JTIwc21pbGluZ3xlbnwwfHx8fDE3NzI4ODMxOTF8MA&ixlib=rb-4.1.0&q=85"
+      ]
+    },
+    "icons": "Use Lucide React (e.g., Code, Rocket, Globe, Shield, Zap, Users)"
+  },
+  "technical_instructions": {
+    "dependencies": {
+      "framer-motion": "Required for all animations",
+      "lenis": "Required for smooth scrolling",
+      "clsx": "For class merging",
+      "tailwind-merge": "For class merging",
+      "react-countup": "For stats section",
+      "react-fast-marquee": "For testimonials/clients"
+    },
+    "fonts": {
+      "google_fonts_url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+    },
+    "global_css": "Add 'scroll-smooth' to html. Use Lenis for body scroll hijacking.",
+    "testing": "All interactive elements must have data-testid attributes."
+  },
+  "universal_guidelines": {
+    "do_not": [
+      "Use gradients for text unless it's a very specific highlight.",
+      "Use default scrollbars.",
+      "Center text in cards (Align Left usually looks better for readabilty).",
+      "Use 'Inter' for headings."
+    ],
+    "must": [
+      "Use 'Plus Jakarta Sans' for all headings.",
+      "Add hover states to ALL interactive elements.",
+      "Use 3x more padding than you think is necessary."
+    ]
+  }
+}
