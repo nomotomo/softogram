@@ -81,38 +81,75 @@ const AnimatedSection = ({ children, className = "" }) => {
   );
 };
 
-// New Logo Component
-const SoftogramLogo = ({ size = "default" }) => {
+// New Logo Component - Code Brackets + Signal Wave
+const SoftogramLogo = ({ size = "default", showTagline = false }) => {
   const sizes = {
-    small: { container: "w-8 h-8", text: "text-lg" },
-    default: { container: "w-10 h-10", text: "text-xl" },
-    large: { container: "w-12 h-12", text: "text-2xl" }
+    small: { icon: "w-9 h-9", text: "text-lg", tagline: "text-[10px]" },
+    default: { icon: "w-10 h-10", text: "text-xl", tagline: "text-xs" },
+    large: { icon: "w-12 h-12", text: "text-2xl", tagline: "text-sm" }
   };
   
   return (
-    <div className="flex items-center gap-2">
-      <div className={`${sizes[size].container} relative`}>
-        {/* Outer ring with gradient */}
-        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-cyan-400 via-cyan-500 to-violet-600 animate-pulse opacity-50 blur-sm"></div>
-        {/* Main logo container */}
-        <div className="relative w-full h-full rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center overflow-hidden">
-          {/* Abstract S shape */}
-          <svg viewBox="0 0 40 40" className="w-6 h-6" fill="none">
-            <path 
-              d="M28 12C28 12 24 8 18 10C12 12 10 18 14 22C18 26 26 24 28 28C30 32 24 36 18 34C12 32 10 28 10 28" 
-              stroke="black" 
-              strokeWidth="3" 
-              strokeLinecap="round"
-              fill="none"
-            />
-            <circle cx="28" cy="12" r="2" fill="black"/>
-            <circle cx="10" cy="28" r="2" fill="black"/>
-          </svg>
-        </div>
+    <div className="flex items-center gap-3">
+      {/* Icon - Code Brackets with Signal Wave */}
+      <div className={`${sizes[size].icon} relative flex items-center justify-center`}>
+        {/* Glow effect */}
+        <div className="absolute inset-0 bg-cyan-400/20 rounded-lg blur-md"></div>
+        {/* Main icon */}
+        <svg viewBox="0 0 40 40" className="w-full h-full relative z-10" fill="none">
+          {/* Left bracket < */}
+          <path 
+            d="M12 8L4 20L12 32" 
+            stroke="url(#bracketGradient)" 
+            strokeWidth="2.5" 
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          {/* Right bracket > morphing into signal */}
+          <path 
+            d="M28 8L36 20L28 32" 
+            stroke="url(#bracketGradient)" 
+            strokeWidth="2.5" 
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          {/* Signal wave in center */}
+          <path 
+            d="M14 20H17L19 14L21 26L23 17L25 23L26 20H28" 
+            stroke="url(#signalGradient)" 
+            strokeWidth="2" 
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          {/* Glowing core dot */}
+          <circle cx="20" cy="20" r="2" fill="#00F5FF">
+            <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          {/* Gradients */}
+          <defs>
+            <linearGradient id="bracketGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#00F5FF"/>
+              <stop offset="100%" stopColor="#7C3AED"/>
+            </linearGradient>
+            <linearGradient id="signalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#00F5FF"/>
+              <stop offset="50%" stopColor="#00F5FF"/>
+              <stop offset="100%" stopColor="#7C3AED"/>
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
-      <span className={`font-bold ${sizes[size].text} text-white font-['Space_Grotesk'] tracking-tight`}>
-        Softo<span className="text-cyan-400">gram</span>
-      </span>
+      {/* Wordmark */}
+      <div className="flex flex-col">
+        <span className={`font-bold ${sizes[size].text} text-white font-['Space_Grotesk'] tracking-tight leading-none`}>
+          Softo<span className="bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-transparent">gram</span>
+        </span>
+        {showTagline && (
+          <span className={`${sizes[size].tagline} text-gray-500 mt-1 tracking-wide`}>
+            Your idea. Our code. Delivered.
+          </span>
+        )}
+      </div>
     </div>
   );
 };
@@ -207,9 +244,8 @@ const Navbar = () => {
 
   const navLinks = isHomePage ? [
     { href: "#services", label: "Services" },
-    { href: "#case-studies", label: "Case Studies" },
     { href: "#pricing", label: "Pricing" },
-    { href: "#portfolio", label: "Portfolio" },
+    { href: "#portfolio", label: "Work" },
     { href: "#contact", label: "Contact" }
   ] : [
     { href: "/", label: "Home" },
@@ -223,23 +259,24 @@ const Navbar = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-5xl z-50 rounded-full px-6 md:px-8 py-4 flex items-center justify-between transition-all duration-300 ${
-        scrolled ? "navbar-glass shadow-2xl" : "bg-black/30 backdrop-blur-sm border border-white/5"
+      className={`fixed top-4 left-4 right-4 z-50 rounded-2xl px-4 py-3 flex items-center justify-between transition-all duration-300 max-w-screen-lg mx-auto ${
+        scrolled ? "navbar-glass shadow-2xl" : "bg-black/50 backdrop-blur-md border border-white/10"
       }`}
+      style={{ left: '50%', right: 'auto', transform: 'translateX(-50%)', width: 'calc(100% - 32px)', maxWidth: '1000px' }}
       data-testid="navbar"
     >
-      <Link to="/" className="flex items-center gap-2" data-testid="logo-link">
+      <Link to="/" className="flex items-center" data-testid="logo-link">
         <SoftogramLogo size="small" />
       </Link>
 
       {/* Desktop Nav */}
-      <div className="hidden md:flex items-center gap-8">
+      <div className="hidden xl:flex items-center gap-5">
         {navLinks.map((link) => (
           link.href.startsWith("#") || link.href.includes("#") ? (
             <a
               key={link.href}
               href={link.href}
-              className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium"
+              className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium whitespace-nowrap"
               data-testid={`nav-link-${link.label.toLowerCase().replace(" ", "-")}`}
             >
               {link.label}
@@ -248,7 +285,7 @@ const Navbar = () => {
             <Link
               key={link.href}
               to={link.href}
-              className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium"
+              className="text-gray-400 hover:text-cyan-400 transition-colors text-sm font-medium whitespace-nowrap"
               data-testid={`nav-link-${link.label.toLowerCase()}`}
             >
               {link.label}
@@ -256,14 +293,14 @@ const Navbar = () => {
           )
         ))}
         {isHomePage ? (
-          <a href="#contact">
-            <button className="btn-glow text-sm" data-testid="nav-cta-button">
+          <a href="#contact" className="ml-2">
+            <button className="btn-glow text-sm px-5 py-2 whitespace-nowrap" data-testid="nav-cta-button">
               Start Project
             </button>
           </a>
         ) : (
-          <Link to="/#contact">
-            <button className="btn-glow text-sm" data-testid="nav-cta-button">
+          <Link to="/#contact" className="ml-2">
+            <button className="btn-glow text-sm px-5 py-2 whitespace-nowrap" data-testid="nav-cta-button">
               Start Project
             </button>
           </Link>
@@ -272,7 +309,7 @@ const Navbar = () => {
 
       {/* Mobile Menu Button */}
       <button
-        className="md:hidden text-white p-2"
+        className="xl:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         data-testid="mobile-menu-toggle"
       >
@@ -286,16 +323,16 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 mt-4 navbar-glass rounded-2xl p-6 md:hidden"
+            className="absolute top-full left-0 right-0 mt-2 navbar-glass rounded-2xl p-4 xl:hidden"
             data-testid="mobile-menu"
           >
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 link.href.startsWith("#") ? (
                   <a
                     key={link.href}
                     href={link.href}
-                    className="text-gray-400 hover:text-cyan-400 transition-colors text-base font-medium py-2"
+                    className="text-gray-400 hover:text-cyan-400 hover:bg-white/5 transition-colors text-base font-medium py-3 px-4 rounded-lg"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {link.label}
@@ -304,18 +341,20 @@ const Navbar = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="text-gray-400 hover:text-cyan-400 transition-colors text-base font-medium py-2"
+                    className="text-gray-400 hover:text-cyan-400 hover:bg-white/5 transition-colors text-base font-medium py-3 px-4 rounded-lg"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {link.label}
                   </Link>
                 )
               ))}
-              <a href={isHomePage ? "#contact" : "/#contact"} onClick={() => setMobileMenuOpen(false)}>
-                <button className="btn-glow w-full py-3 text-sm mt-2">
-                  Start Project
-                </button>
-              </a>
+              <div className="pt-2 mt-2 border-t border-white/10">
+                <a href={isHomePage ? "#contact" : "/#contact"} onClick={() => setMobileMenuOpen(false)}>
+                  <button className="btn-glow w-full py-3 text-sm">
+                    Start Project
+                  </button>
+                </a>
+              </div>
             </div>
           </motion.div>
         )}
@@ -1207,105 +1246,140 @@ const ContactSection = () => {
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const quickLinks = [
-    { href: "/", label: "Home" },
-    { href: "/#services", label: "Services" },
-    { href: "/#pricing", label: "Pricing" },
-    { href: "/#portfolio", label: "Portfolio" },
-    { href: "/#contact", label: "Contact" }
-  ];
+  const footerLinks = {
+    company: [
+      { href: "/", label: "Home" },
+      { href: "/#services", label: "Services" },
+      { href: "/#case-studies", label: "Case Studies" },
+      { href: "/#portfolio", label: "Portfolio" },
+      { href: "/#contact", label: "Contact" }
+    ],
+    legal: [
+      { href: "/privacy-policy", label: "Privacy Policy" },
+      { href: "/terms-and-conditions", label: "Terms & Conditions" },
+      { href: "/refund-policy", label: "Refund Policy" },
+      { href: "/cookie-policy", label: "Cookie Policy" }
+    ]
+  };
 
-  const legalLinks = [
-    { href: "/privacy-policy", label: "Privacy Policy" },
-    { href: "/terms-and-conditions", label: "Terms & Conditions" },
-    { href: "/refund-policy", label: "Refund Policy" },
-    { href: "/cookie-policy", label: "Cookie Policy" }
+  const socialLinks = [
+    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    { icon: Github, href: "#", label: "GitHub" },
+    { icon: Twitter, href: "#", label: "Twitter" },
+    { icon: Instagram, href: "#", label: "Instagram" },
+    { icon: Facebook, href: "#", label: "Facebook" }
   ];
 
   return (
-    <footer className="bg-[#0A0A0A]" data-testid="footer">
-      {/* Gradient Border */}
-      <div className="footer-gradient-border"></div>
+    <footer className="bg-[#050505] relative" data-testid="footer">
+      {/* Top gradient line */}
+      <div className="h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
       
-      <div className="container-custom py-16">
-        <div className="grid md:grid-cols-4 gap-12 mb-12">
-          {/* Brand */}
-          <div>
-            <SoftogramLogo size="default" />
-            <p className="text-gray-500 mt-4 mb-4">Your idea. Our code. Delivered.</p>
-            <p className="text-sm text-gray-600">
-              Premium software development studio crafting digital experiences.
+      <div className="container-custom">
+        {/* Main footer content */}
+        <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
+          
+          {/* Brand Section - Takes more space */}
+          <div className="lg:col-span-5">
+            <SoftogramLogo size="default" showTagline={true} />
+            <p className="text-gray-500 mt-6 text-sm leading-relaxed max-w-sm">
+              We're a premium software development studio crafting digital experiences 
+              that help businesses grow. From startups to enterprises.
             </p>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold text-white mb-4 font-['Space_Grotesk']">Quick Links</h4>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-500 hover:text-cyan-400 transition-colors text-sm"
-                    data-testid={`footer-link-${link.label.toLowerCase()}`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="font-semibold text-white mb-4 font-['Space_Grotesk']">Legal</h4>
-            <ul className="space-y-3">
-              {legalLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-500 hover:text-cyan-400 transition-colors text-sm"
-                    data-testid={`footer-link-${link.label.toLowerCase().replace(/ /g, "-")}`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Social */}
-          <div>
-            <h4 className="font-semibold text-white mb-4 font-['Space_Grotesk']">Connect With Us</h4>
-            <div className="flex gap-3 mb-6">
-              {[
-                { icon: Linkedin, href: "#" },
-                { icon: Github, href: "#" },
-                { icon: Twitter, href: "#" },
-                { icon: Instagram, href: "#" },
-                { icon: Facebook, href: "#" }
-              ].map((social, index) => (
+            
+            {/* Social Links */}
+            <div className="flex items-center gap-3 mt-6">
+              {socialLinks.map((social, index) => (
                 <a
                   key={index}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-lg bg-[#1A1A1A] border border-[#2A2A2A] flex items-center justify-center hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(0,245,255,0.2)] transition-all"
+                  className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:border-cyan-400/50 hover:bg-cyan-400/10 transition-all group"
+                  data-testid={`footer-social-${social.label.toLowerCase()}`}
+                  aria-label={social.label}
                 >
-                  <social.icon className="w-5 h-5 text-gray-500" />
+                  <social.icon className="w-4 h-4 text-gray-500 group-hover:text-cyan-400 transition-colors" />
                 </a>
               ))}
             </div>
-            <p className="text-sm text-gray-600">
-              hello@softogram.com
-            </p>
+          </div>
+
+          {/* Company Links */}
+          <div className="lg:col-span-3">
+            <h4 className="text-white font-semibold mb-4 font-['Space_Grotesk']">Company</h4>
+            <ul className="space-y-3">
+              {footerLinks.company.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-gray-500 hover:text-cyan-400 transition-colors text-sm inline-flex items-center gap-1 group"
+                  >
+                    <span>{link.label}</span>
+                    <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal Links */}
+          <div className="lg:col-span-2">
+            <h4 className="text-white font-semibold mb-4 font-['Space_Grotesk']">Legal</h4>
+            <ul className="space-y-3">
+              {footerLinks.legal.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-gray-500 hover:text-cyan-400 transition-colors text-sm"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div className="lg:col-span-2">
+            <h4 className="text-white font-semibold mb-4 font-['Space_Grotesk']">Contact</h4>
+            <ul className="space-y-3">
+              <li>
+                <a 
+                  href="mailto:hello@softogram.com" 
+                  className="text-gray-500 hover:text-cyan-400 transition-colors text-sm flex items-center gap-2"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>hello@softogram.com</span>
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="tel:+91-98XXXXXXXX" 
+                  className="text-gray-500 hover:text-cyan-400 transition-colors text-sm flex items-center gap-2"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>+91-98XXXXXXXX</span>
+                </a>
+              </li>
+              <li className="text-gray-500 text-sm flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                <span>Uttar Pradesh, India</span>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-[#2A2A2A] pt-8 text-center">
-          <p className="text-sm text-gray-600">
-            © {currentYear} Softogram. Crafted with precision in India. 🇮🇳
-          </p>
+        {/* Bottom bar */}
+        <div className="border-t border-white/10 py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-gray-600 text-sm text-center sm:text-left">
+              © {currentYear} Softogram. All rights reserved.
+            </p>
+            <p className="text-gray-600 text-sm flex items-center gap-1">
+              Crafted with precision in India <span className="ml-1">🇮🇳</span>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
