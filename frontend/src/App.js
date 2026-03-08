@@ -805,7 +805,7 @@ const ProjectsSection = () => {
       description: "Real-time group expense management with balance tracking and smart settlement suggestions.",
       tags: ["Java", "Spring Boot", "PostgreSQL", "REST API"],
       image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop",
-      link: "#"
+      link: "https://cosmicsaaurabh.github.io/myportfoliooo/"
     },
     {
       title: "Custom API Gateway",
