@@ -64,8 +64,8 @@ Build a premium, dark-themed website for Softogram software company with:
 ```
 # Backend (.env)
 SENDGRID_API_KEY=your_sendgrid_api_key_here
-SENDER_EMAIL=hello@softogram.com
-RECIPIENT_EMAIL=hello@softogram.com
+SENDER_EMAIL=support@softogram.com
+RECIPIENT_EMAIL=support@softogram.com
 ```
 
 ## Prioritized Backlog

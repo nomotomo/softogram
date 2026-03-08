@@ -694,7 +694,7 @@ const PricingSection = () => {
   const plans = [
     {
       name: "Starter",
-      price: "₹25,000 – ₹50,000",
+      price: "₹10,000 – ₹25,000",
       description: "Perfect for small businesses getting started online",
       features: [
         "Business website up to 5 pages",
@@ -707,7 +707,7 @@ const PricingSection = () => {
     },
     {
       name: "Growth",
-      price: "₹75,000 – ₹2,00,000",
+      price: "₹25,000 – ₹1,00,000",
       description: "For businesses ready to scale with custom solutions",
       features: [
         "Custom web application",
@@ -795,21 +795,24 @@ const ProjectsSection = () => {
   const projects = [
     {
       title: "Polluxkart",
-      description: "Full-stack e-commerce platform. React frontend, .NET microservices backend, AWS deployment. Features: product catalog, cart, payments, order management.",
-      tags: ["React", ".NET", "AWS", "Microservices"],
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop"
+      description: "Full-stack e-commerce platform. React frontend, Python microservices backend, AWS deployment. Features: product catalog, cart, payments, order management.",
+      tags: ["React", "Python", "FastApi", "AWS", "Microservices", "Mongodb"],
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop",
+      link: "https://polluxkart.com"
     },
     {
       title: "Expense Splitter App",
       description: "Real-time group expense management with balance tracking and smart settlement suggestions.",
       tags: ["Java", "Spring Boot", "PostgreSQL", "REST API"],
-      image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop"
+      image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop",
+      link: "#"
     },
     {
       title: "Custom API Gateway",
       description: "High-performance API gateway with dynamic routing, JWT authentication, and rate limiting built for a microservices ecosystem.",
       tags: ["Go", "Docker", "Kubernetes", "gRPC"],
-      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop"
+      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop",
+      link: "#"
     }
   ];
 
@@ -850,13 +853,16 @@ const ProjectsSection = () => {
                       </span>
                     ))}
                   </div>
-                  <button
-                    className="btn-outline w-full py-2 text-sm flex items-center justify-center gap-2"
-                    data-testid={`project-view-${index}`}
+                  <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-outline w-full py-2 text-sm flex items-center justify-center gap-2"
+                      data-testid={`project-view-${index}`}
                   >
                     View Project
                     <ExternalLink className="w-4 h-4" />
-                  </button>
+                  </a>
                 </div>
               </div>
             </AnimatedSection>
@@ -1090,7 +1096,7 @@ const ContactSection = () => {
                   <label className="text-sm text-gray-400 mb-2 block">Phone Number *</label>
                   <input
                     type="tel"
-                    placeholder="+91-98XXXXXXXX"
+                    placeholder="+91-6393783010"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="input-dark w-full"
@@ -1186,8 +1192,8 @@ const ContactSection = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold text-white mb-1">Email Us</h4>
-                      <a href="mailto:hello@softogram.com" className="text-gray-500 hover:text-cyan-400 transition-colors" data-testid="contact-email-link">
-                        hello@softogram.com
+                      <a href="mailto:support@softogram.com" className="text-gray-500 hover:text-cyan-400 transition-colors" data-testid="contact-email-link">
+                        support@softogram.com
                       </a>
                     </div>
                   </div>
@@ -1197,8 +1203,8 @@ const ContactSection = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold text-white mb-1">Call Us</h4>
-                      <a href="tel:+91-98XXXXXXXX" className="text-gray-500 hover:text-cyan-400 transition-colors" data-testid="contact-phone-link">
-                        +91-98XXXXXXXX
+                      <a href="tel:+91-6393783010" className="text-gray-500 hover:text-cyan-400 transition-colors" data-testid="contact-phone-link">
+                        +91-6393783010
                       </a>
                     </div>
                   </div>
@@ -1219,7 +1225,7 @@ const ContactSection = () => {
                 <h3 className="text-xl font-bold text-white mb-6 font-['Space_Grotesk']">Connect With Us</h3>
                 <div className="flex gap-4">
                   {[
-                    { icon: Linkedin, href: "#", label: "LinkedIn" },
+                    { icon: Linkedin, href: "https://www.linkedin.com/company/softogram/about/", label: "LinkedIn" },
                     { icon: Github, href: "#", label: "GitHub" },
                     { icon: Twitter, href: "#", label: "Twitter" },
                     { icon: Instagram, href: "#", label: "Instagram" },
@@ -1267,7 +1273,7 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    { icon: Linkedin, href: "https://www.linkedin.com/company/softogram/about/", label: "LinkedIn" },
     { icon: Github, href: "#", label: "GitHub" },
     { icon: Twitter, href: "#", label: "Twitter" },
     { icon: Instagram, href: "#", label: "Instagram" },
@@ -1350,20 +1356,19 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <a 
-                  href="mailto:hello@softogram.com" 
+                  href="mailto:support@softogram.com"
                   className="text-gray-500 hover:text-cyan-400 transition-colors text-sm flex items-center gap-2"
                 >
-                  <Mail className="w-4 h-4" />
-                  <span>hello@softogram.com</span>
+                  <Mail className="w-4 h-4 flex-shrink-0"/> <span> support@softogram.com</span>
                 </a>
               </li>
               <li>
                 <a 
-                  href="tel:+91-98XXXXXXXX" 
+                  href="tel:+91-6393783010"
                   className="text-gray-500 hover:text-cyan-400 transition-colors text-sm flex items-center gap-2"
                 >
                   <Phone className="w-4 h-4" />
-                  <span>+91-98XXXXXXXX</span>
+                  <span>+91-6393783010</span>
                 </a>
               </li>
               <li className="text-gray-500 text-sm flex items-center gap-2">
@@ -1394,7 +1399,7 @@ const Footer = () => {
 const WhatsAppButton = () => {
   return (
     <a
-      href="https://wa.me/9198XXXXXXXX"
+      href="https://wa.me/6393783010?text=Hello%20Softogram!%20I%20have%20a%20project%20idea%20I'd%20like%20to%20discuss."
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-btn"
@@ -1506,7 +1511,7 @@ const PrivacyPolicy = () => (
         <li>Request deletion of your data at any time</li>
         <li>Opt-out of marketing communications</li>
       </ul>
-      <p className="mt-4">To exercise any of these rights, please email us at <a href="mailto:hello@softogram.com" className="text-cyan-400 hover:underline">hello@softogram.com</a></p>
+      <p className="mt-4">To exercise any of these rights, please email us at <a href="mailto:support@softogram.com" className="text-cyan-400 hover:underline">support@softogram.com</a></p>
     </PolicySection>
 
     <PolicySection title="Changes to This Policy">
@@ -1515,7 +1520,7 @@ const PrivacyPolicy = () => (
 
     <PolicySection title="Contact Us">
       <p>If you have any questions about this Privacy Policy, please contact us at:</p>
-      <p className="mt-2"><strong className="text-white">Email:</strong> <a href="mailto:hello@softogram.com" className="text-cyan-400 hover:underline">hello@softogram.com</a></p>
+      <p className="mt-2"><strong className="text-white">Email:</strong> <a href="mailto:support@softogram.com" className="text-cyan-400 hover:underline">support@softogram.com</a></p>
     </PolicySection>
   </PolicyLayout>
 );
@@ -1624,7 +1629,7 @@ const RefundPolicy = () => (
     <PolicySection title="Refund Process">
       <p>To request a refund:</p>
       <ul className="list-disc pl-6 space-y-2">
-        <li>Send a written request to <a href="mailto:hello@softogram.com" className="text-cyan-400 hover:underline">hello@softogram.com</a> within 7 days of payment</li>
+        <li>Send a written request to <a href="mailto:support@softogram.com" className="text-cyan-400 hover:underline">support@softogram.com</a> within 7 days of payment</li>
         <li>Include your project details and reason for the refund request</li>
         <li>Our team will review your request within 3–5 business days</li>
         <li>Approved refunds will be processed within 7–10 business days</li>
@@ -1680,7 +1685,7 @@ const CookiePolicy = () => (
     </PolicySection>
 
     <PolicySection title="Contact Us">
-      <p>If you have questions about our use of cookies, please contact us at <a href="mailto:hello@softogram.com" className="text-cyan-400 hover:underline">hello@softogram.com</a></p>
+      <p>If you have questions about our use of cookies, please contact us at <a href="mailto:support@softogram.com" className="text-cyan-400 hover:underline">support@softogram.com</a></p>
     </PolicySection>
   </PolicyLayout>
 );
