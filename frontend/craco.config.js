@@ -37,6 +37,21 @@ let webpackConfig = {
       '@': path.resolve(__dirname, 'src'),
     },
     configure: (webpackConfig) => {
+      // Suppress source-map-loader errors for packages that ship broken source map refs
+      // (e.g. @react-three/fiber bundled scheduler/zustand)
+      webpackConfig.ignoreWarnings = [/Failed to parse source map/];
+      webpackConfig.module.rules = webpackConfig.module.rules.map((rule) => {
+        if (rule.enforce === "pre" && rule.use) {
+          const uses = Array.isArray(rule.use) ? rule.use : [rule.use];
+          if (uses.some((u) => (u.loader || u).includes?.("source-map-loader"))) {
+            return {
+              ...rule,
+              exclude: /node_modules/,
+            };
+          }
+        }
+        return rule;
+      });
 
       // Add ignored patterns to reduce watched directories
         webpackConfig.watchOptions = {

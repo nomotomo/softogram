@@ -5,16 +5,17 @@ import axios from "axios";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import CountUp from "react-countup";
 import Marquee from "react-fast-marquee";
-import { 
-  Code, 
-  Globe, 
-  ShoppingCart, 
-  Server, 
+import {
+  Code,
+  Globe,
+  ShoppingCart,
+  Server,
   Briefcase,
   Gamepad2,
   Bot,
   Rocket,
   CheckCircle,
+  Check,
   Award,
   MessageCircle,
   Shield,
@@ -43,7 +44,9 @@ import {
   Monitor,
   Smartphone
 } from "lucide-react";
+import { cn } from "./lib/utils";
 import { Button } from "./components/ui/button";
+import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "./components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
 import { Toaster, toast } from "sonner";
 
@@ -367,44 +370,104 @@ const Navbar = () => {
   );
 };
 
+// Word-by-word animated headline for the hero
+const AnimatedHeadline = () => {
+  const line1 = ["We", "Build", "Software", "That"];
+  const line2 = ["Grows", "Your", "Business"];
+
+  const wordVariants = {
+    hidden: { opacity: 0, y: 24, skewX: -4 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      skewX: 0,
+      transition: {
+        delay: i * 0.12 + 0.3,
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    }),
+  };
+
+  return (
+    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight font-['Space_Grotesk']">
+      <span className="flex flex-wrap justify-center gap-x-3">
+        {line1.map((word, i) => (
+          <motion.span
+            key={word}
+            custom={i}
+            initial="hidden"
+            animate="visible"
+            variants={wordVariants}
+            className="inline-block"
+          >
+            {word}
+          </motion.span>
+        ))}
+      </span>
+      <span className="flex flex-wrap justify-center gap-x-3 mt-1">
+        {line2.map((word, i) => (
+          <motion.span
+            key={word}
+            custom={line1.length + i}
+            initial="hidden"
+            animate="visible"
+            variants={wordVariants}
+            className="inline-block gradient-text"
+          >
+            {word}
+          </motion.span>
+        ))}
+      </span>
+    </h1>
+  );
+};
+
 // Hero Section
 const HeroSection = () => {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden px-4 dot-pattern pt-20" data-testid="hero-section">
+    <section
+      className="min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden px-4 dot-pattern pt-20"
+      data-testid="hero-section"
+    >
       {/* Background Orbs */}
       <div className="gradient-orb orb-cyan absolute -top-48 -right-48" />
       <div className="gradient-orb orb-violet absolute -bottom-32 -left-32" />
-      
+
       {/* Content */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className="relative z-10 max-w-4xl mx-auto pt-16"
-      >
+      <div className="relative z-10 max-w-4xl mx-auto pt-16">
+        {/* Badge */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           className="inline-flex items-center gap-2 glass-card rounded-full px-4 py-2 mb-8"
         >
           <Zap className="w-4 h-4 text-cyan-400" />
           <span className="text-sm text-gray-400">Premium Software Development Studio</span>
         </motion.div>
 
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight font-['Space_Grotesk']">
-          We Build Software That{" "}
-          <span className="gradient-text">
-            Grows Your Business
-          </span>
-        </h1>
+        {/* Word-by-word animated headline */}
+        <AnimatedHeadline />
 
-        <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Custom websites, web apps, enterprise software, games, and intelligent automation — 
+        {/* Subtitle — fades in after headline words finish */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.15, ease: "easeOut" }}
+          className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+        >
+          Custom websites, web apps, enterprise software, games, and intelligent automation —{" "}
           end-to-end digital solutions for ambitious businesses.
-        </p>
+        </motion.p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.35, ease: "easeOut" }}
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+        >
           <a href="#contact">
             <button className="btn-glow flex items-center gap-2 text-base" data-testid="hero-cta-quote">
               Start Your Project
@@ -416,10 +479,10 @@ const HeroSection = () => {
               Explore Our Work
             </button>
           </a>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
 
-      {/* Code Window */}
+      {/* Code Window — unchanged */}
       <motion.div
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
@@ -691,48 +754,109 @@ const CaseStudiesSection = () => {
 
 // Pricing Section
 const PricingSection = () => {
+  // Master feature list for comparison table — ordered from basic to advanced
+  const allFeatures = [
+    "Responsive design",
+    "Contact form integration",
+    "Basic SEO setup",
+    "Business website (up to 5 pages)",
+    "2 revision rounds",
+    "Custom web application",
+    "E-commerce capabilities",
+    "API integration",
+    "Admin dashboard",
+    "3 months post-launch support",
+    "Priority development",
+    "Enterprise software development",
+    "Game development",
+    "AI automation & workflows",
+    "Microservices architecture",
+    "Cloud infrastructure",
+    "Dedicated support & custom SLA",
+  ];
+
   const plans = [
     {
+      id: "starter",
       name: "Starter",
       price: "₹10,000 – ₹25,000",
       description: "Perfect for small businesses getting started online",
+      popular: false,
+      buttonLabel: "Get Started",
       features: [
-        "Business website up to 5 pages",
-        "Responsive design",
-        "Contact form integration",
-        "Basic SEO setup",
-        "2 revision rounds"
+        { name: "Responsive design", isIncluded: true },
+        { name: "Contact form integration", isIncluded: true },
+        { name: "Basic SEO setup", isIncluded: true },
+        { name: "Business website (up to 5 pages)", isIncluded: true },
+        { name: "2 revision rounds", isIncluded: true },
+        { name: "Custom web application", isIncluded: false },
+        { name: "E-commerce capabilities", isIncluded: false },
+        { name: "API integration", isIncluded: false },
+        { name: "Admin dashboard", isIncluded: false },
+        { name: "3 months post-launch support", isIncluded: false },
+        { name: "Priority development", isIncluded: false },
+        { name: "Enterprise software development", isIncluded: false },
+        { name: "Game development", isIncluded: false },
+        { name: "AI automation & workflows", isIncluded: false },
+        { name: "Microservices architecture", isIncluded: false },
+        { name: "Cloud infrastructure", isIncluded: false },
+        { name: "Dedicated support & custom SLA", isIncluded: false },
       ],
-      popular: false
     },
     {
+      id: "growth",
       name: "Growth",
       price: "₹25,000 – ₹1,00,000",
       description: "For businesses ready to scale with custom solutions",
+      popular: true,
+      buttonLabel: "Get Started",
       features: [
-        "Custom web application",
-        "E-commerce capabilities",
-        "API integration",
-        "Admin dashboard",
-        "3 months post-launch support",
-        "Priority development"
+        { name: "Responsive design", isIncluded: true },
+        { name: "Contact form integration", isIncluded: true },
+        { name: "Basic SEO setup", isIncluded: true },
+        { name: "Business website (up to 5 pages)", isIncluded: true },
+        { name: "2 revision rounds", isIncluded: true },
+        { name: "Custom web application", isIncluded: true },
+        { name: "E-commerce capabilities", isIncluded: true },
+        { name: "API integration", isIncluded: true },
+        { name: "Admin dashboard", isIncluded: true },
+        { name: "3 months post-launch support", isIncluded: true },
+        { name: "Priority development", isIncluded: true },
+        { name: "Enterprise software development", isIncluded: false },
+        { name: "Game development", isIncluded: false },
+        { name: "AI automation & workflows", isIncluded: false },
+        { name: "Microservices architecture", isIncluded: false },
+        { name: "Cloud infrastructure", isIncluded: false },
+        { name: "Dedicated support & custom SLA", isIncluded: false },
       ],
-      popular: true
     },
     {
+      id: "custom",
       name: "Custom",
       price: "Let's Talk",
       description: "Enterprise solutions tailored to your exact needs",
+      popular: false,
+      buttonLabel: "Contact Us",
       features: [
-        "Enterprise software development",
-        "Game development",
-        "AI automation & workflows",
-        "Microservices architecture",
-        "Cloud infrastructure",
-        "Dedicated support & custom SLA"
+        { name: "Responsive design", isIncluded: true },
+        { name: "Contact form integration", isIncluded: true },
+        { name: "Basic SEO setup", isIncluded: true },
+        { name: "Business website (up to 5 pages)", isIncluded: true },
+        { name: "2 revision rounds", isIncluded: true },
+        { name: "Custom web application", isIncluded: true },
+        { name: "E-commerce capabilities", isIncluded: true },
+        { name: "API integration", isIncluded: true },
+        { name: "Admin dashboard", isIncluded: true },
+        { name: "3 months post-launch support", isIncluded: true },
+        { name: "Priority development", isIncluded: true },
+        { name: "Enterprise software development", isIncluded: true },
+        { name: "Game development", isIncluded: true },
+        { name: "AI automation & workflows", isIncluded: true },
+        { name: "Microservices architecture", isIncluded: true },
+        { name: "Cloud infrastructure", isIncluded: true },
+        { name: "Dedicated support & custom SLA", isIncluded: true },
       ],
-      popular: false
-    }
+    },
   ];
 
   return (
@@ -747,43 +871,143 @@ const PricingSection = () => {
           </p>
         </AnimatedSection>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {plans.map((plan, index) => (
-            <AnimatedSection key={index}>
-              <div
-                className={`glass-card p-8 h-full flex flex-col ${
-                  plan.popular ? "pricing-popular" : ""
-                }`}
-                data-testid={`pricing-card-${plan.name.toLowerCase()}`}
-              >
-                <div className="mb-6">
-                  <h3 className="text-2xl font-bold text-white mb-2 font-['Space_Grotesk']">{plan.name}</h3>
-                  <div className="text-2xl font-bold gradient-text mb-3">{plan.price}</div>
-                  <p className="text-gray-500 text-sm">{plan.description}</p>
-                </div>
+        {/* Pricing Cards */}
+        <div className="grid md:grid-cols-3 gap-8 md:gap-6 lg:gap-8 items-start">
+          {plans.map((plan) => {
+            const includedFeatures = plan.features.filter((f) => f.isIncluded);
+            return (
+              <AnimatedSection key={plan.id}>
+                <Card
+                  className={cn(
+                    "flex flex-col bg-[#111111] border-[#2A2A2A] transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10",
+                    plan.popular &&
+                      "ring-2 ring-cyan-400 shadow-xl shadow-cyan-400/20 md:scale-[1.03] hover:scale-[1.05] hover:shadow-cyan-400/30"
+                  )}
+                  data-testid={`pricing-card-${plan.id}`}
+                >
+                  <CardHeader className="p-6 pb-4">
+                    <div className="flex justify-between items-start">
+                      <CardTitle className="text-2xl font-bold text-white font-['Space_Grotesk']">
+                        {plan.name}
+                      </CardTitle>
+                      {plan.popular && (
+                        <span className="text-xs font-semibold px-3 py-1 bg-gradient-to-r from-cyan-400 to-violet-500 text-black rounded-full whitespace-nowrap">
+                          Most Popular
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-2xl font-bold gradient-text mt-3">{plan.price}</div>
+                    <CardDescription className="text-gray-500 text-sm mt-1">
+                      {plan.description}
+                    </CardDescription>
+                  </CardHeader>
 
-                <ul className="space-y-4 mb-8 flex-grow">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-400 text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                  <CardContent className="flex-grow px-6 pb-0 pt-0">
+                    <h4 className="text-xs font-semibold mb-3 text-gray-500 uppercase tracking-wider">
+                      What's included
+                    </h4>
+                    <ul className="space-y-2">
+                      {includedFeatures.slice(0, 5).map((feature) => (
+                        <li key={feature.name} className="flex items-start gap-3 py-1">
+                          <Check
+                            className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5"
+                            aria-hidden="true"
+                          />
+                          <span className="text-gray-400 text-sm">{feature.name}</span>
+                        </li>
+                      ))}
+                      {includedFeatures.length > 5 && (
+                        <li className="text-sm text-gray-500 mt-1 pl-7">
+                          + {includedFeatures.length - 5} more features
+                        </li>
+                      )}
+                    </ul>
+                  </CardContent>
 
-                <a href="#contact">
-                  <button
-                    className={`w-full py-3 font-semibold rounded-full transition-all ${
-                      plan.popular ? "btn-glow" : "btn-outline"
-                    }`}
-                    data-testid={`pricing-cta-${plan.name.toLowerCase()}`}
+                  <CardFooter className="p-6 pt-4">
+                    <a href="#contact" className="w-full">
+                      <button
+                        className={`w-full py-3 font-semibold rounded-full transition-all ${
+                          plan.popular ? "btn-glow" : "btn-outline"
+                        }`}
+                        data-testid={`pricing-cta-${plan.id}`}
+                      >
+                        {plan.buttonLabel}
+                      </button>
+                    </a>
+                  </CardFooter>
+                </Card>
+              </AnimatedSection>
+            );
+          })}
+        </div>
+
+        {/* Comparison Table — desktop/tablet only */}
+        <div className="mt-16 hidden md:block border border-[#2A2A2A] rounded-xl overflow-x-auto">
+          <table className="min-w-full divide-y divide-[#2A2A2A]">
+            <thead>
+              <tr className="bg-[#111111]">
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-sm font-semibold text-gray-400 w-[280px]"
+                >
+                  Feature
+                </th>
+                {plans.map((plan) => (
+                  <th
+                    key={`th-${plan.id}`}
+                    scope="col"
+                    className={cn(
+                      "px-6 py-4 text-center text-sm font-semibold whitespace-nowrap",
+                      plan.popular ? "text-cyan-400 bg-cyan-500/5" : "text-gray-400"
+                    )}
                   >
-                    Get Started
-                  </button>
-                </a>
-              </div>
-            </AnimatedSection>
-          ))}
+                    {plan.name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#2A2A2A]">
+              {allFeatures.map((featureName, index) => (
+                <tr
+                  key={featureName}
+                  className={cn(
+                    "transition-colors hover:bg-white/5",
+                    index % 2 !== 0 && "bg-[#0D0D0D]/60"
+                  )}
+                >
+                  <td className="px-6 py-3 text-left text-sm text-gray-400 font-medium">
+                    {featureName}
+                  </td>
+                  {plans.map((plan) => {
+                    const feature = plan.features.find((f) => f.name === featureName);
+                    const isIncluded = feature?.isIncluded ?? false;
+                    return (
+                      <td
+                        key={`${plan.id}-${featureName}`}
+                        className={cn(
+                          "px-6 py-3 text-center",
+                          plan.popular && "bg-cyan-500/5"
+                        )}
+                      >
+                        {isIncluded ? (
+                          <Check
+                            className="h-4 w-4 mx-auto text-cyan-400"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <X
+                            className="h-4 w-4 mx-auto text-gray-700"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
